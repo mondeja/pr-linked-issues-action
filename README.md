@@ -1,4 +1,4 @@
-# pr-linked-issue-action
+# pr-linked-issues-action
 
 This action returns which issues will be closed by a pull request.
 
@@ -35,7 +35,7 @@ jobs:
     steps:
       - name: Get issue numbers separated by commas
         id: get-issues
-        uses: mondeja/pr-linked-issues-action@1.0.0
+        uses: mondeja/pr-linked-issues-action@v1.0.0
       - name: Print issue numbers
         run: echo ${{ steps.get-issues.outputs.issues }}
 ```
@@ -54,7 +54,7 @@ jobs:
     steps:
       - name: Get issue numbers separated by commas
         id: get-issues
-        uses: mondeja/pr-linked-issues-action@1.0.0
+        uses: mondeja/pr-linked-issues-action@v1.0.0
         with:
           repository_owner: rajednom
           repository_name: gh-actions-webhooks
