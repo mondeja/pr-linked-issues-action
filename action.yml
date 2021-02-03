@@ -18,7 +18,7 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'docker://mondeja/pr-linked-issue-action:master'
+  image: 'docker://mondeja/pr-linked-issue-action:0.0.1'
   args:
     - ${{ inputs.repository_owner }}
     - ${{ inputs.repository_name }}
