@@ -1,0 +1,27 @@
+# action.yml
+name: PR linked issues
+description: Get issues linked to pull request
+author: mondeja
+inputs:
+  repository_owner:
+    description: The owner of the repository where is located the pull request.
+    required: false
+  repository_name: The name of the repository where is located the pull request.
+    required: false
+  pull_request: Number of the pull request for which linked pull requests will be retrieved.
+    required: false
+outputs:
+  issues:
+    description: Issue numbers whose will be closed by the pull request, separated by commas.
+
+runs:
+  using: 'docker'
+  image: 'docker://mondeja/pr-linked-issue-action:master'
+  args:
+    - ${{ inputs.repository_owner }}
+    - ${{ inputs.repository_name }}
+    - ${{ inputs.pr_number }}
+
+branding:
+  icon: 'box'
+  color: 'red'
