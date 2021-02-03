@@ -62,7 +62,9 @@ function main() {
       | sort -u \
       | tr "\n" ","
   )
-  ISSUES="${ISSUES::-1}"
+  if [ ! -z  "$ISSUES" ]; then
+    ISSUES="${ISSUES::-1}"
+  fi;
   echo "::set-output name=issues::$ISSUES"
 }
 
