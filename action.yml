@@ -6,9 +6,11 @@ inputs:
   repository_owner:
     description: The owner of the repository where is located the pull request.
     required: false
-  repository_name: The name of the repository where is located the pull request.
+  repository_name:
+    description: The name of the repository where is located the pull request.
     required: false
-  pull_request: Number of the pull request for which linked pull requests will be retrieved.
+  pull_request:
+    description: Number of the pull request for which linked pull requests will be retrieved.
     required: false
 outputs:
   issues:

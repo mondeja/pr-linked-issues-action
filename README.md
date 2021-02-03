@@ -10,7 +10,7 @@ This action returns which issues will be closed by a pull request.
 
 Currently [is not possible][support-ref-closed-issues], even with the
 [GraphQL v4 Github API][graphql-api], get those issues that will be closed by a
-pull request, so this action uses HTML parsing of the Github API UI to retrieve
+pull request, so this action uses HTML parsing of the Github UI to retrieve
 this information.
 
 **USE IT AT YOUR OWN RISK**
