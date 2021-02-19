@@ -17,7 +17,7 @@ this information.
 
 ## Examples
 
-### Get linked issues for current event pull request
+### Get linked issues for current pull request
 
 ```yaml
 name: Get linked issues
