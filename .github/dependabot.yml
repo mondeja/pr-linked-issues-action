@@ -7,3 +7,10 @@ updates:
       time: "04:00"
     assignees:
       - mondeja
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: daily
+      time: "04:00"
+    assignees:
+      - mondeja
