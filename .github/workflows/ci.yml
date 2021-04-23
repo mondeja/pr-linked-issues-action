@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  schedule:
+    - cron: 0 3 * * 6
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: sudo apt install shunit2
+      - name: Test with shunit2
+        run: bash tests.sh
