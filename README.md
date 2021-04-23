@@ -1,5 +1,7 @@
 # pr-linked-issues-action
 
+[![Tests][tests-image]][tests-link]
+
 This action returns which issues will be closed by a pull request.
 
 <p align="center">
@@ -65,3 +67,5 @@ jobs:
 
 [support-ref-closed-issues]: https://github.community/t/support-for-discovering-referenced-and-to-be-closed-issues-from-a-pr/14354/4
 [graphql-api]: https://docs.github.com/en/graphql
+[tests-image]: https://img.shields.io/github/workflow/status/mondeja/pr-linked-issues-action/CI?logo=github&label=tests
+[tests-link]: https://github.com/mondeja/pr-linked-issues-action/actions?query=workflow%3ACI
