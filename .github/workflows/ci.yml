@@ -20,4 +20,4 @@ jobs:
       - name: Install dependencies
         run: sudo apt install shunit2
       - name: Test with shunit2
-        run: bash tests.sh
+        run: ./test
