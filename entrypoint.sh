@@ -7,7 +7,7 @@ PULL_REQUEST="$INPUT_PULL_REQUEST"
 __LINKED_ISSUES_HTML=""
 
 
-prepareInputs {
+prepareInputs() {
   if [ -z "$REPOSITORY_OWNER" ]; then
     REPOSITORY_OWNER=$(cat "$GITHUB_EVENT_PATH" | jq -r ".repository.owner.login")
   fi;
@@ -28,7 +28,7 @@ prepareInputs {
 }
 
 
-extractLinkedIssuesHTML {
+extractLinkedIssuesHTML() {
   URL="https://github.com/$REPOSITORY_OWNER/$REPOSITORY_NAME/pull/$PULL_REQUEST/"
 
   _INSIDE_FORM=0
