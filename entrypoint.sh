@@ -45,7 +45,7 @@ extractLinkedIssuesHTML() {
 $line"
       fi;
     fi;
-  done < <(curl -sSL --retry 3 "$URL")
+  done < "$(curl -sSL --retry 3 "$URL")"
 }
 
 
