@@ -27,18 +27,6 @@ prepareInputs() {
   fi;
 }
 
-contains() {
-    string="$1"
-    substring="$2"
-    if test "${string#*$substring}" != "$string"
-    then
-        return 0    # $substring is in $string
-    else
-        return 1    # $substring is not in $string
-    fi
-}
-
-
 extractLinkedIssuesHTML() {
   URL="https://github.com/$REPOSITORY_OWNER/$REPOSITORY_NAME/pull/$PULL_REQUEST/"
   inside_form_substring="<form class=\"js-issue-sidebar-form"
