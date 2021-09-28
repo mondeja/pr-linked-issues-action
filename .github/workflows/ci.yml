@@ -37,4 +37,4 @@ jobs:
           repository_name: pr-linked-issues-action-testing
           pull_request: 3
       - name: Check issue numbers
-        run: if [ " ${{ steps.get-issues.outputs.issues }}" != "1,2" ]; then exit 1; fi
+        run: if [ "${{ steps.get-issues.outputs.issues }}" != "1,2" ]; then exit 1; fi
