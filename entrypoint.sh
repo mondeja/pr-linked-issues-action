@@ -31,7 +31,6 @@ main() {
 
   script="query{repository(name:\\\"$REPOSITORY_NAME\\\",owner:\\\"$REPOSITORY_OWNER\\\"){pullRequest(number:$PULL_REQUEST){closingIssuesReferences(first:100){nodes{number}}}}}"
   response="$(curl -s -H 'Content-Type: application/json' \
-    -H "Authorization: bearer $GITHUB_TOKEN" \
     -X POST -d "{ \"query\": \"$script\"}" https://api.github.com/graphql)"
   echo ::set-output name=issues::$(echo $response \
     | jq .data.repository.pullRequest.closingIssuesReferences.nodes[].number? \
