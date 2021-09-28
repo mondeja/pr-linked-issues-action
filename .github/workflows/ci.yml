@@ -36,5 +36,7 @@ jobs:
           repository_owner: mondeja
           repository_name: pr-linked-issues-action-testing
           pull_request: 3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Check issue numbers
         run: if [ "${{ steps.get-issues.outputs.issues }}" != "1,2" ]; then exit 1; fi
