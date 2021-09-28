@@ -28,15 +28,13 @@ jobs:
     steps:
       - name: Get branch name
         id: get-branch-name
-        run: echo "::set-output name=branch-name::$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}})"
+        run: echo "::set-output name=branch::$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}})"
       - name: Get issue numbers separated by commas
         id: get-issues
-        uses: mondeja/pr-linked-issues-action@${{ steps.get-branch-name.outputs.branch-name }}
+        uses: mondeja/pr-linked-issues-action@${{ steps.get-branch-name.outputs.branch }}
         with:
           repository_owner: mondeja
           repository_name: pr-linked-issues-action-testing
           pull_request: 3
       - name: Check issue numbers
-        run: |
-          output="$(echo ${{ steps.get-issues.outputs.issues }})"
-          if [ "$output" != "1,2" ]; then exit 1; fi
+        run: if [ " ${{ steps.get-issues.outputs.issues }}" != "1,2" ]; then exit 1; fi
