@@ -15,8 +15,6 @@ Currently [is not possible][support-ref-closed-issues], even with the
 pull request, so this action uses HTML parsing of the Github UI to retrieve
 this information.
 
-**USE IT AT YOUR OWN RISK**
-
 ## Examples
 
 ### Get linked issues for current pull request
@@ -37,7 +35,7 @@ jobs:
     steps:
       - name: Get issue numbers separated by commas
         id: get-issues
-        uses: mondeja/pr-linked-issues-action@v1.0.0
+        uses: mondeja/pr-linked-issues-action@v1
       - name: Print issue numbers
         run: echo ${{ steps.get-issues.outputs.issues }}
 ```
@@ -56,10 +54,10 @@ jobs:
     steps:
       - name: Get issue numbers separated by commas
         id: get-issues
-        uses: mondeja/pr-linked-issues-action@v1.0.0
+        uses: mondeja/pr-linked-issues-action@v1
         with:
-          repository_owner: rajednom
-          repository_name: gh-actions-webhooks
+          repository_owner: <your-username>
+          repository_name: <your-repository>
           pull_request: 5
       - name: Print issue numbers
         run: echo ${{ steps.get-issues.outputs.issues }}
