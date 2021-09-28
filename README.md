@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Get issue numbers separated by commas
         id: get-issues
-        uses: mondeja/pr-linked-issues-action@v1
+        uses: mondeja/pr-linked-issues-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Print linked issue numbers
@@ -50,7 +50,7 @@ jobs:
     steps:
       - name: Get issue numbers separated by commas
         id: get-issues
-        uses: mondeja/pr-linked-issues-action@v1
+        uses: mondeja/pr-linked-issues-action@v2
         with:
           repository_owner: <your-username>
           repository_name: <your-repository>
