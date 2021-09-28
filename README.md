@@ -30,6 +30,8 @@ jobs:
       - name: Get issue numbers separated by commas
         id: get-issues
         uses: mondeja/pr-linked-issues-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Print linked issue numbers
         run: echo ${{ steps.get-issues.outputs.issues }}
 ```
@@ -53,6 +55,8 @@ jobs:
           repository_owner: <your-username>
           repository_name: <your-repository>
           pull_request: <pull-request-number>
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Print linked issue numbers
         run: echo ${{ steps.get-issues.outputs.issues }}
 ```
