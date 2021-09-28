@@ -20,4 +20,21 @@ jobs:
       - name: Install dependencies
         run: sudo apt install shunit2
       - name: Test with shunit2
-        run: ./test
+        run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} ./test
+  get-linked-issues:
+    name: Get linked issues
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Get branch name
+        id: get-branch-name
+        run: echo "::set-output name=branch::$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}})"
+      - name: Get issue numbers separated by commas
+        id: get-issues
+        uses: mondeja/pr-linked-issues-action@v1
+        with:
+          repository_owner: mondeja
+          repository_name: pr-linked-issues-action-testing
+          pull_request: 3
+      - name: Check issue numbers
+        run: if [ "${{ steps.get-issues.outputs.issues }}" != "1,2" ]; then exit 1; fi

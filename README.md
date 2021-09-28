@@ -2,18 +2,12 @@
 
 [![Tests][tests-image]][tests-link]
 
-This action returns which issues will be closed by a pull request.
+This action returns which issues will be closed by a pull request using
+[GraphQL v4 Github API][graphql-api].
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/mondeja/pr-linked-issues-action/master/graphic-explanation.png" alt="Graphic explanation"></a>
 </p>
-
-## Disclaimer
-
-Currently [is not possible][support-ref-closed-issues], even with the
-[GraphQL v4 Github API][graphql-api], get those issues that will be closed by a
-pull request, so this action uses HTML parsing of the Github UI to retrieve
-this information.
 
 ## Examples
 
@@ -36,7 +30,7 @@ jobs:
       - name: Get issue numbers separated by commas
         id: get-issues
         uses: mondeja/pr-linked-issues-action@v1
-      - name: Print issue numbers
+      - name: Print linked issue numbers
         run: echo ${{ steps.get-issues.outputs.issues }}
 ```
 
@@ -58,8 +52,8 @@ jobs:
         with:
           repository_owner: <your-username>
           repository_name: <your-repository>
-          pull_request: 5
-      - name: Print issue numbers
+          pull_request: <pull-request-number>
+      - name: Print linked issue numbers
         run: echo ${{ steps.get-issues.outputs.issues }}
 ```
 
