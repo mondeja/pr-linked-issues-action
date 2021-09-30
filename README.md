@@ -2,12 +2,49 @@
 
 [![Tests][tests-image]][tests-link]
 
-This action returns which issues will be closed by a pull request using
-[GraphQL v4 Github API][graphql-api].
+This action returns which issues may be be closed by a pull request using
+[Github GraphQL v4 API][graphql-api].
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/mondeja/pr-linked-issues-action/master/graphic-explanation.png" alt="Graphic explanation"></a>
 </p>
+
+## Documentation
+
+Without specifying inputs, you should run it on `pull_request` or
+`pull_request_target` events and the pull request for which linked issues will
+be obtained will be the pull request that triggered the action.
+
+In other contexts you can use `repository_owner`, `repository_name` and
+`pull_request` inputs to specify a pull request.
+
+### Inputs
+
+All are optional.
+
+- <a name="input_repository_owner" href="#input_repository_owner">#</a>
+ <b>repository_owner</b> ⇒ Organization or user owner of the repository against
+ which the pull request with linked issues to retrieve is opened.
+- <a name="input_repository_name" href="#input_repository_name">#</a>
+ <b>repository_name</b> ⇒ Name of the repository against which the pull request
+ with linked issues to retrieve is opened.
+- <a name="input_pull_request" href="#input_pull_request">#</a>
+ <b>pull_request</b> ⇒ Number of the pull request to retrieve.
+- <a name="input_owners" href="#input_owners">#</a> <b>owners</b> ⇒ Indicates
+ if you want to retrieve linked issues owners. If `true`, the outputs `opener`
+ and `others` will be added.
+
+### Outputs
+
+- <a name="output_issues" href="#output_issues">#</a> <b>issues</b> ⇒ Linked
+ issues for the pull request, separated by commas.
+
+If `owners` input is `true`, the next ouputs will be added:
+
+- <a name="output_opener" href="#output_opener">#</a> <b>opener</b> ⇒ Linked
+ issues that have been opened by the pull request opener.
+- <a name="output_others" href="#output_others">#</a> <b>others</b> ⇒ Linked
+ issues that haven't been opened by the pull request opener.
 
 ## Examples
 
@@ -27,13 +64,43 @@ jobs:
     name: Get linked issues
     runs-on: ubuntu-latest
     steps:
-      - name: Get issue numbers separated by commas
+      - name: Get issues
         id: get-issues
         uses: mondeja/pr-linked-issues-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Print linked issue numbers
         run: echo ${{ steps.get-issues.outputs.issues }}
+```
+
+### Check if pull request has linked issues
+
+```yaml
+name: Has linked issues
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - edited
+
+jobs:
+  check-linked-issues:
+    name: Check if pull request has linked issues
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get issues
+        id: get-issues
+        uses: mondeja/pr-linked-issues-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Print has linked issues
+        id: has-linked-issues
+        if: join(steps.get-issues.outputs.issues) != ''
+        run: echo "Has linked issues"
+      - name: Print has not linked issues
+        if: steps.has-linked-issues.conclusion == 'skipped'
+        run: echo "Has not linked issues"
 ```
 
 ### Get linked issues for specified pull request
@@ -48,7 +115,7 @@ jobs:
     name: Get linked issues
     runs-on: ubuntu-latest
     steps:
-      - name: Get issue numbers separated by commas
+      - name: Get issues
         id: get-issues
         uses: mondeja/pr-linked-issues-action@v2
         with:
@@ -59,6 +126,34 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Print linked issue numbers
         run: echo ${{ steps.get-issues.outputs.issues }}
+```
+
+### Check if pull request resolves other users' issues
+
+```yaml
+name: Is generous contributor
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - edited
+
+jobs:
+  check-others-linked-issues:
+    name: Has linked issues opened by others
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get issues
+        id: get-issues
+        uses: mondeja/pr-linked-issues-action@v2
+        with:
+          owners: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Print is generous contributor
+        if: join(steps.get-issues.outputs.others) != ''
+        run: echo "You are a generous developer!"
 ```
 
 [support-ref-closed-issues]: https://github.community/t/support-for-discovering-referenced-and-to-be-closed-issues-from-a-pr/14354/4

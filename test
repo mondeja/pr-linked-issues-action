@@ -22,6 +22,22 @@ testLinkedPRs() {
   assertEquals "::set-output name=issues::1,2" "$(INPUT_PULL_REQUEST=3 sh entrypoint.sh)"
 }
 
+testLinkedPRsOwners() {
+  assertEquals \
+    "::set-output name=issues::1,2,7
+::set-output name=opener::7
+::set-output name=others::1,2" \
+    "$(INPUT_PULL_REQUEST=6 INPUT_OWNERS=true sh entrypoint.sh)"
+}
+
+testLinkedPRsOwnersNoOthers() {
+  assertEquals \
+    "::set-output name=issues::1,2
+::set-output name=opener::1,2
+::set-output name=others::" \
+    "$(INPUT_PULL_REQUEST=3 INPUT_OWNERS=true sh entrypoint.sh)"
+}
+
 main() {
   checkDependencies
   . shunit2
