@@ -39,7 +39,7 @@ All are optional.
 - <a name="output_issues" href="#output_issues">#</a> <b>issues</b> ⇒ Linked
  issues for the pull request, separated by commas.
 
-If `owners` input is `true`, the next ouputs will be added:
+If `owners` input is `true`, the next outputs will be added:
 
 - <a name="output_opener" href="#output_opener">#</a> <b>opener</b> ⇒ Linked
  issues that have been opened by the pull request opener.
