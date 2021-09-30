@@ -35,8 +35,12 @@ jobs:
         with:
           repository_owner: mondeja
           repository_name: pr-linked-issues-action-testing
-          pull_request: 3
+          pull_request: 6
+          owners: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Check issue numbers
-        run: if [ "${{ steps.get-issues.outputs.issues }}" != "1,2" ]; then exit 1; fi
+        run: |
+          if [ "${{ steps.get-issues.outputs.issues }}" != "1,2,7" ]; then exit 1; fi
+          if [ "${{ steps.get-issues.outputs.opener }}" != "7" ]; then exit 1; fi
+          if [ "${{ steps.get-issues.outputs.others }}" != "1,2" ]; then exit 1; fi

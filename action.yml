@@ -12,9 +12,16 @@ inputs:
   pull_request:
     description: Number of the pull request for which linked pull requests will be retrieved.
     required: false
+  owners:
+    description: Indicate that the action will output `opener` and `others`, showing in them the linked issues opened by the pull request owner (`opener`) and those opened by other users (`others`).
+    required: false
 outputs:
   issues:
-    description: Issue numbers whose will be closed by the pull request, separated by commas.
+    description: Issue numbers which may be closed by the pull request, separated by commas.
+  opener:
+    description: Issue numbers which may be closed by the pull request, that are opened by the pull request opener, separated by commas.
+  others:
+    description: Issue numbers which may be closed by the pull request, that are opened by other users than the pull request opener, separated by commas.
 
 runs:
   using: 'docker'
