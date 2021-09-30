@@ -31,12 +31,16 @@ jobs:
         run: echo "::set-output name=branch::$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}})"
       - name: Get issue numbers separated by commas
         id: get-issues
-        uses: mondeja/pr-linked-issues-action@v2
+        uses: mondeja/pr-linked-issues-action@dev
         with:
           repository_owner: mondeja
           repository_name: pr-linked-issues-action-testing
-          pull_request: 3
+          pull_request: 6
+          owners: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Check issue numbers
-        run: if [ "${{ steps.get-issues.outputs.issues }}" != "1,2" ]; then exit 1; fi
+        run: |
+          if [ "${{ steps.get-issues.outputs.issues }}" != "1,2,7" ]; then exit 1; fi
+          if [ "${{ steps.get-issues.outputs.opener }}" != "7" ]; then exit 1; fi
+          if [ "${{ steps.get-issues.outputs.others }}" != "1,2" ]; then exit 1; fi
