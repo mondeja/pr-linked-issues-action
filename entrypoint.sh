@@ -67,8 +67,8 @@ main() {
       fi
     done
 
-    opener="$(< /tmp/opener.txt sed 's/,\{1,\}$//')"
-    others="$(< /tmp/others.txt sed 's/,\{1,\}$//')"
+    opener="$(< /tmp/opener.txt sed 's/[n,]\{1,\}$//')"
+    others="$(< /tmp/others.txt sed 's/[n,]\{1,\}$//')"
 
     rm -f /tmp/opener.txt /tmp/others.txt
 
