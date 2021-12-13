@@ -93,7 +93,7 @@ get_issues() {
     done;
   fi;
 
-  echo "$(ls -1 "$linked_issues_tmpdir" | tr '\n' ',' | sed 's/,$//')"
+  ls -1 "$linked_issues_tmpdir" | tr '\n' ',' | sed 's/,$//'
   rm -rf "$linked_issues_tmpdir"
 }
 
