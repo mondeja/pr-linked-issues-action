@@ -185,9 +185,8 @@ jobs:
             :wrench: the problem #{issue_number} like a boss
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Print is generous contributor
-        if: join(steps.get-issues.outputs.others) != ''
-        run: echo "You are a generous developer!"
+      - name: Print linked issue numbers
+        run: echo ${{ steps.get-issues.outputs.issues }}
 ```
 
 [support-ref-closed-issues]: https://github.community/t/support-for-discovering-referenced-and-to-be-closed-issues-from-a-pr/14354/4
