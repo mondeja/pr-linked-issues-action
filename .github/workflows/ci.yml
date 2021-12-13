@@ -38,6 +38,7 @@ jobs:
           pull_request: 6
           owners: true
           add_links_by_content: |
+            **Closes**: #{issue_number}
             makes #{issue_number} crazy
             resolves #{issue_number} even if not exists
         env:

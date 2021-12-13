@@ -82,9 +82,9 @@ get_issues() {
       #   - Grouping using ()
       regex="$(
         echo "$placeholder_line" \
-        | sed -e "s/\*/\\\\*/g" \
-              -e "s/\\+/\\\\+/g" \
-              -e "s/\./\\\\./g" \
+        | sed -e "s/\x2a/\\\\*/g" \
+              -e "s/\x2b/\\\\+/g" \
+              -e "s/\x2e/\\\\./g" \
               -e "s/\[/\\\\[/g" \
               -e "s/\]/\\\\]/g" \
               -e "s/\\^/\\\\^/g" \
