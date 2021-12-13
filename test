@@ -38,6 +38,12 @@ testLinkedPRsOwnersNoOthers() {
     "$(INPUT_PULL_REQUEST=3 INPUT_OWNERS=true sh entrypoint.sh)"
 }
 
+testLinkedPRsByContent() {
+  assertEquals \
+    "::set-output name=issues::1,2" \
+    "$(INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="**Closes**: #{issue_number}\nfishes #{issue_number}\nhumancipates #{issue_number}\nmakes #{issue_number} crazy\nresolves #{issue_number} even if not exists" sh entrypoint.sh)"
+}
+
 main() {
   checkDependencies
   . shunit2

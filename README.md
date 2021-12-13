@@ -33,6 +33,10 @@ All are optional.
 - <a name="input_owners" href="#input_owners">#</a> <b>owners</b> ⇒ Indicates
  if you want to retrieve linked issues owners. If `true`, the outputs `opener`
  and `others` will be added.
+- <a name="add_links_by_content" href="#add_links_by_content">#</a> <b>add_links_by_content</b> ⇒ Add other links to issues numbers defined
+ in the body of the pull request. Specify inside a `{issue_number}` placeholder
+ for the additional issues that will be linked. Multiple can be defined
+ separating them by newlines.
 
 ### Outputs
 
@@ -149,6 +153,36 @@ jobs:
         uses: mondeja/pr-linked-issues-action@v2
         with:
           owners: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Print is generous contributor
+        if: join(steps.get-issues.outputs.others) != ''
+        run: echo "You are a generous developer!"
+```
+
+### Set linked issues by pull request content
+
+```yaml
+name: Is generous contributor
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - edited
+
+jobs:
+  check-others-linked-issues:
+    name: Has linked issues opened by others
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get issues
+        id: get-issues
+        uses: mondeja/pr-linked-issues-action@v2
+        with:
+          add_links_by_content: |
+            **Closes**: #{issue_number}
+            :wrench: the problem #{issue_number} like a boss
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Print is generous contributor
