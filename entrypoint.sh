@@ -80,6 +80,8 @@ get_issues() {
       # Current limitations:
       #   - Number of occurrences using {#}
       #   - Grouping using ()
+      #
+      # \x2b is the hexadecimal form of '+' character
       regex="$(
         echo "$placeholder_line" \
         | sed -e "s/\*/\\\\*/g" \
