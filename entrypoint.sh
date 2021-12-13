@@ -62,6 +62,11 @@ get_issues() {
 
     # iterate over placeholder expressions
     echo "$ADD_LINKS_BY_CONTENT" | while read placeholder_line; do
+      # ignore empty input lines
+      if [ -z "$placeholder_line" ]; then
+        continue
+      fi;
+
       # check that every line contains the '{issue_number}' placeholder
       contains_pull_request_placeholder="$(echo "$placeholder_line" | grep "{issue_number}")"
       if [ -z "$contains_pull_request_placeholder" ]; then
@@ -78,7 +83,7 @@ get_issues() {
       regex="$(
         echo "$placeholder_line" \
         | sed -e "s/\*/\\\\*/g" \
-              -e "s/\+/\\\\+/g" \
+              -e "s/\\+/\\\\+/g" \
               -e "s/\./\\\\./g" \
               -e "s/\[/\\\\[/g" \
               -e "s/\]/\\\\]/g" \

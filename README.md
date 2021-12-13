@@ -180,9 +180,9 @@ jobs:
         id: get-issues
         uses: mondeja/pr-linked-issues-action@v2
         with:
-          # You need to separate placeholders with '%0A' (encoded newline) for now.
-          # See: https://github.community/t/multiline-inputs-for-workflow-dispatch/163906/3
-          add_links_by_content: '**Closes**: #{issue_number}%0A:wrench: the problem #{issue_number} like a boss'
+          add_links_by_content: |
+            **Closes**: #{issue_number}
+            :wrench: the problem #{issue_number} like a boss
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Print linked issue numbers
