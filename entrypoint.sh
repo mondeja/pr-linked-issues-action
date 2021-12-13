@@ -47,7 +47,18 @@ get_issues() {
 
   # add links to other issues by content
   if [ -n "$ADD_LINKS_BY_CONTENT" ]; then
-    pull_request_body="$(< "$GITHUB_EVENT_PATH" jq ".pull_request.body")"
+    if [ -z "$REPOSITORY_OWNER" ] || [ -z "$REPOSITORY_NAME" ] || [ -z "$PULL_REQUEST" ]; then
+      # get body from event pull request
+      pull_request_body="$(< "$GITHUB_EVENT_PATH" jq ".pull_request.body")"
+    else
+      # get body from Github API
+      pull_request_body="$(
+        curl -s \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "authorization: Bearer $GITHUB_TOKEN" \
+          https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/pulls/$PULL_REQUEST \
+        | jq .body)"
+    fi;
 
     # iterate over placeholder expressions
     echo "$ADD_LINKS_BY_CONTENT" | while read placeholder_line; do
