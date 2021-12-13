@@ -33,10 +33,10 @@ All are optional.
 - <a name="input_owners" href="#input_owners">#</a> <b>owners</b> ⇒ Indicates
  if you want to retrieve linked issues owners. If `true`, the outputs `opener`
  and `others` will be added.
-- <a name="add_links_by_content" href="#add_links_by_content">#</a> <b>add_links_by_content</b> ⇒ Add other links to issues numbers defined
- in the body of the pull request. Specify inside a `{issue_number}` placeholder
- for the additional issues that will be linked. Multiple can be defined
- separating them by newlines.
+- <a name="add_links_by_content" href="#add_links_by_content">#</a> <b>add_links_by_content</b> ⇒ Add other links to issues numbers defined in the
+ body of the pull request. Specify inside a `{issue_number}` placeholder
+ a content matcher for additional issues that will be linked. Multiple can be
+ defined separating them by newlines.
 
 ### Outputs
 
@@ -163,7 +163,7 @@ jobs:
 ### Set linked issues by pull request content
 
 ```yaml
-name: Is generous contributor
+name: I'm a crazy issue linker
 on:
   pull_request_target:
     types:
@@ -173,7 +173,7 @@ on:
 
 jobs:
   check-others-linked-issues:
-    name: Has linked issues opened by others
+    name: Has linked issues defined by PR content
     runs-on: ubuntu-latest
     steps:
       - name: Get issues
