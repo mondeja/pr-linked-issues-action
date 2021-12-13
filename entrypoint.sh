@@ -84,7 +84,7 @@ get_issues() {
         echo "$placeholder_line" \
         | sed -e "s/\x2a/\\\\*/g" \
               -e "s/\x2b/\\\\+/g" \
-              -e "s/\x2e/\\\\./g" \
+              -e "s/\./\\\\./g" \
               -e "s/\[/\\\\[/g" \
               -e "s/\]/\\\\]/g" \
               -e "s/\\^/\\\\^/g" \
