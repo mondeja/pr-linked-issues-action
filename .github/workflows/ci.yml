@@ -37,9 +37,7 @@ jobs:
           repository_name: pr-linked-issues-action-testing
           pull_request: 6
           owners: true
-          add_links_by_content: |
-            'makes #{issue_number} crazy'
-            'resolves #{issue_number} even if not exists'
+          add_links_by_content: 'makes #{issue_number} crazy%0Aresolves #{issue_number} even if not exists'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Check issue numbers
