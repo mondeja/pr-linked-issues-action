@@ -84,7 +84,8 @@ get_issues() {
       # \x2b -> '+'
       # \x28 -> '('
       # \x29 -> ')'
-      # \x7d -> '{'
+      # \x7b -> '{'
+      # \x7d -> '}'
       regex="$(
         echo "$placeholder_line" \
         | sed -e "s/\*/\\\\*/g" \
@@ -96,7 +97,8 @@ get_issues() {
               -e "s/\\$/\\\\$/g" \
               -e "s/\x28/\\\\\x28/g" \
               -e "s/\x29/\\\\\x29/g" \
-              -e "s/\x7d(?!issue_number)/\\\\\x7d/g" \
+              -e "s/\x7b(?!issue_number)/\\\\\x7b/g" \
+              -e "s/\x7d(?<!issue_number)/\\\\\x7d/g" \
               -e "s/{issue_number}/([[:digit:]]+)/"
       )"
 
