@@ -48,6 +48,7 @@ jobs:
             resolves #{issue_number} even if not exists
             [{issue_number}]
             ...{issue_number}..
+            ${issue_number}^
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Check issue numbers
@@ -55,6 +56,6 @@ jobs:
           echo "${{ steps.get-issues.outputs.issues }}"
           echo "${{ steps.get-issues.outputs.opener }}"
           echo "${{ steps.get-issues.outputs.others }}"
-          if [ "${{ steps.get-issues.outputs.issues }}" != "0,1,2,7,55,77,78" ]; then exit 1; fi
+          if [ "${{ steps.get-issues.outputs.issues }}" != "0,1,2,7,55,57,77,78" ]; then exit 1; fi
           if [ "${{ steps.get-issues.outputs.opener }}" != "7" ]; then exit 1; fi
-          if [ "${{ steps.get-issues.outputs.others }}" != "0,1,2,55,77,78" ]; then exit 1; fi
+          if [ "${{ steps.get-issues.outputs.others }}" != "0,1,2,55,57,77,78" ]; then exit 1; fi
