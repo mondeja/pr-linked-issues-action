@@ -175,7 +175,7 @@ jobs:
         run: echo "You are a generous developer!"
 ```
 
-### Set linked issues by pull request content
+### Output linked issues by pull request body content
 
 ```yaml
 name: I report linked issues that are not really linked
@@ -202,6 +202,36 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Print linked issue numbers
         run: echo ${{ steps.get-issues.outputs.issues }}
+```
+
+### All outputted issues by pull request body content exist
+
+```yaml
+name: I report linked issues that are not really linked
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - edited
+
+jobs:
+  check-linked-issues-by-content:
+    name: Has "linked issues" defined by PR content
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get issues
+        id: get-issues
+        uses: mondeja/pr-linked-issues-action@v2
+        with:
+          add_links_by_content: |
+            **Closes**: #{issue_number}
+            :wrench: {issue_number}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Linked issues by pull request body content exist
+        if: join(steps.get-issues.outputs.null) != ''
+        run: echo "All are existing issues!"
 ```
 
 [support-ref-closed-issues]: https://github.community/t/support-for-discovering-referenced-and-to-be-closed-issues-from-a-pr/14354/4
