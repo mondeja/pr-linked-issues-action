@@ -41,7 +41,7 @@ jobs:
         run: echo "::set-output name=branch::$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}})"
       - name: Get issue numbers separated by commas
         id: get-issues
-        uses: mondeja/pr-linked-issues-action@v2
+        uses: mondeja/pr-linked-issues-action@fix-8
         with:
           repository_owner: mondeja
           repository_name: pr-linked-issues-action-testing
@@ -53,6 +53,9 @@ jobs:
             resolves #{issue_number} even if not exists
             [{issue_number}]
             ...{issue_number}..
+            #
+            # Comments like this must be ignored
+            #
             ${issue_number}^
             ({issue_number})
             |{issue_number}|

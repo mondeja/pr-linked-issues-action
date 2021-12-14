@@ -197,6 +197,9 @@ jobs:
         with:
           add_links_by_content: |
             **Closes**: #{issue_number}
+            #
+            # You can add comments that will be ignored
+            #
             :wrench: the problem #{issue_number} like a boss
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -65,8 +65,8 @@ get_issues() {
 
     # iterate over placeholder expressions
     echo "$ADD_LINKS_BY_CONTENT" | while read placeholder_line; do
-      # ignore empty input lines
-      if [ -z "$placeholder_line" ]; then
+      # ignore empty input lines and comments
+      if [ -z "$placeholder_line" ] || [ "$(echo "$placeholder_line" | cut -c -1)" = "#" ]; then
         continue
       fi;
 

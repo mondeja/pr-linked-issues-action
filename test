@@ -51,6 +51,9 @@ resolves #{issue_number} even if not exists
 ...{issue_number}..
 \${issue_number}^
 ({issue_number})
+#
+# Lines starting with '#' character must be ignored
+#
 {{issue_number}}
 |{issue_number}|" ./entrypoint)"
 }
