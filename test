@@ -40,8 +40,15 @@ testLinkedPRsOwnersNoOthers() {
 
 testLinkedPRsByContent() {
   assertEquals \
-    "::set-output name=issues::0,2,34,65,7,77" \
-    "$(INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="**Closes**: #{issue_number}\nfishes #{issue_number}\nhumancipates #{issue_number}\nmakes #{issue_number} crazy\nresolves #{issue_number} even if not exists\n[{issue_number}]" sh entrypoint.sh)"
+    "::set-output name=issues::0,2,34,55,65,7,77" \
+    "$(INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="
+**Closes**: #{issue_number}
+fishes #{issue_number}
+humancipates #{issue_number}
+makes #{issue_number} crazy
+resolves #{issue_number} even if not exists
+[{issue_number}]
+...{issue_number}.." sh entrypoint.sh)"
 }
 
 main() {
