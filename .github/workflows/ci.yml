@@ -26,16 +26,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Show programs versions
-        run: |
-          grep --version
-          grep --help
-          sed --version
-          sed --help
-          curl --version
-          curl --help
-          ls --version
-          ls --help
       - name: Get branch name
         id: get-branch-name
         run: echo "::set-output name=branch::$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}})"
