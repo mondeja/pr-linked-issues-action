@@ -80,11 +80,15 @@ get_issues() {
 
       # build regex replacing '{issue_number}' with digit matcher using Posix ERE and escape it
       #
+      # Current limitations:
+      #   - '{{issue_number}}' placeholder does not work in Alpine (in Ubuntu is OK)
+      #
       # Hexadecimal characters used in the following regexes
       # \x2b -> '+'
       # \x28 -> '('
       # \x29 -> ')'
       # \x7b -> '{'
+      # \x7c -> '|'
       # \x7d -> '}'
       regex="$(
         echo "$placeholder_line" \
@@ -95,10 +99,11 @@ get_issues() {
               -e "s/\]/\\\\]/g" \
               -e "s/\\^/\\\\^/g" \
               -e "s/\\$/\\\\$/g" \
+              -e "s/\x7c/\\\\\x7c/g" \
               -e "s/\x28/\\\\\x28/g" \
               -e "s/\x29/\\\\\x29/g" \
-              -e "s/\x7b(?!\x28?issue_number)/\\\x7b/g" \
-              -e "s/\x7d(?<!\x29?issue_number)/\\\x7d/g" \
+              -e "s/\x7b(?!?issue_number)/\\\x7b/g" \
+              -e "s/\x7d(?<!?issue_number)/\\\x7d/g" \
               -e "s/{issue_number}/([[:digit:]]+)/"
       )"
 

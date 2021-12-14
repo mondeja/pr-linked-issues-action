@@ -40,7 +40,7 @@ testLinkedPRsOwnersNoOthers() {
 
 testLinkedPRsByContent() {
   assertEquals \
-    "::set-output name=issues::0,2,7,34,55,57,58,59,65,77" \
+    "::set-output name=issues::0,2,7,34,55,57,58,59,60,65,77" \
     "$(INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="
 **Closes**: #{issue_number}
 fishes #{issue_number}
@@ -51,7 +51,8 @@ resolves #{issue_number} even if not exists
 ...{issue_number}..
 \${issue_number}^
 ({issue_number})
-{{issue_number}}" ./entrypoint)"
+{{issue_number}}
+|{issue_number}|" ./entrypoint)"
 }
 
 testLinkedPrsByContentOwners() {
@@ -62,8 +63,7 @@ testLinkedPrsByContentOwners() {
 ::set-output name=null::34" \
     "$(INPUT_OWNERS=true INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="
 **Closes**: #{issue_number}
-fishes #{issue_number}
-" ./entrypoint)"
+fishes #{issue_number}" ./entrypoint)"
 }
 
 main() {
