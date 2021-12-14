@@ -63,6 +63,8 @@ jobs:
           echo "${{ steps.get-issues.outputs.issues }}"
           echo "${{ steps.get-issues.outputs.opener }}"
           echo "${{ steps.get-issues.outputs.others }}"
+          echo "${{ steps.get-issues.outputs.null }}"
           if [ "${{ steps.get-issues.outputs.issues }}" != "0,1,2,7,55,57,58,59,77,78" ]; then exit 1; fi
           if [ "${{ steps.get-issues.outputs.opener }}" != "7" ]; then exit 1; fi
-          if [ "${{ steps.get-issues.outputs.others }}" != "0,1,2,55,57,58,59,77,78" ]; then exit 1; fi
+          if [ "${{ steps.get-issues.outputs.others }}" != "1,2" ]; then exit 1; fi
+          if [ "${{ steps.get-issues.outputs.null }}" != "0,55,57,58,59,77,78" ]; then exit 1; fi
