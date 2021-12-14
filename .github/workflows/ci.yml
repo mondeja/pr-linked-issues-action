@@ -46,6 +46,7 @@ jobs:
             **Closes**: #{issue_number}
             makes #{issue_number} crazy
             resolves #{issue_number} even if not exists
+            [{issue_number}]
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Check issue numbers
