@@ -163,7 +163,7 @@ jobs:
 ### Set linked issues by pull request content
 
 ```yaml
-name: I'm a crazy issue linker
+name: I report linked issues that are not really linked
 on:
   pull_request_target:
     types:
@@ -172,8 +172,8 @@ on:
       - edited
 
 jobs:
-  check-others-linked-issues:
-    name: Has linked issues defined by PR content
+  check-linked-issues-by-content:
+    name: Has "linked issues" defined by PR content
     runs-on: ubuntu-latest
     steps:
       - name: Get issues
