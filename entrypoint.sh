@@ -101,6 +101,7 @@ get_issues() {
               -e "s/\x7d(?<!issue_number)/\\\\\x7d/g" \
               -e "s/{issue_number}/([[:digit:]]+)/"
       )"
+      echo "REGEX: $regex"
 
       more_linked_issues_by_content="$(
         echo "$pull_request_body" \
