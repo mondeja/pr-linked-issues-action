@@ -2,5 +2,5 @@ FROM alpine:3.13.5
 
 RUN apk add --no-cache --no-progress curl jq
 
-COPY entrypoint /entrypoint
+COPY entrypoint /
 ENTRYPOINT ["./entrypoint"]
