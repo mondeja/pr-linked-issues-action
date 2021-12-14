@@ -1,1 +1,2 @@
-event-file.txt
+*.txt
+*.json

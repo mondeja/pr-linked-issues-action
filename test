@@ -11,15 +11,15 @@ checkDependencies() {
 }
 
 testNoLinkedPRs() {
-  assertEquals "::set-output name=issues::" "$(INPUT_PULL_REQUEST=5 sh entrypoint.sh)"
+  assertEquals "::set-output name=issues::" "$(INPUT_PULL_REQUEST=5 ./entrypoint)"
 }
 
 testLinkedPR() {
-  assertEquals "::set-output name=issues::1" "$(INPUT_PULL_REQUEST=4 sh entrypoint.sh)"
+  assertEquals "::set-output name=issues::1" "$(INPUT_PULL_REQUEST=4 ./entrypoint)"
 }
 
 testLinkedPRs() {
-  assertEquals "::set-output name=issues::1,2" "$(INPUT_PULL_REQUEST=3 sh entrypoint.sh)"
+  assertEquals "::set-output name=issues::1,2" "$(INPUT_PULL_REQUEST=3 ./entrypoint)"
 }
 
 testLinkedPRsOwners() {
@@ -27,7 +27,7 @@ testLinkedPRsOwners() {
     "::set-output name=issues::1,2,7
 ::set-output name=opener::7
 ::set-output name=others::1,2" \
-    "$(INPUT_PULL_REQUEST=6 INPUT_OWNERS=true sh entrypoint.sh)"
+    "$(INPUT_PULL_REQUEST=6 INPUT_OWNERS=true ./entrypoint)"
 }
 
 testLinkedPRsOwnersNoOthers() {
@@ -35,7 +35,38 @@ testLinkedPRsOwnersNoOthers() {
     "::set-output name=issues::1,2
 ::set-output name=opener::1,2
 ::set-output name=others::" \
-    "$(INPUT_PULL_REQUEST=3 INPUT_OWNERS=true sh entrypoint.sh)"
+    "$(INPUT_PULL_REQUEST=3 INPUT_OWNERS=true ./entrypoint)"
+}
+
+testLinkedPRsByContent() {
+  assertEquals \
+    "::set-output name=issues::0,2,7,34,55,57,58,59,60,65,77" \
+    "$(INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="
+**Closes**: #{issue_number}
+fishes #{issue_number}
+humancipates #{issue_number}
+makes #{issue_number} crazy
+resolves #{issue_number} even if not exists
+[{issue_number}]
+...{issue_number}..
+\${issue_number}^
+({issue_number})
+#
+# Lines starting with '#' character must be ignored
+#
+{{issue_number}}
+|{issue_number}|" ./entrypoint)"
+}
+
+testLinkedPrsByContentOwners() {
+  assertEquals \
+    "::set-output name=issues::2,7,34
+::set-output name=opener::7
+::set-output name=others::2
+::set-output name=null::34" \
+    "$(INPUT_OWNERS=true INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="
+**Closes**: #{issue_number}
+fishes #{issue_number}" ./entrypoint)"
 }
 
 main() {

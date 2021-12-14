@@ -37,10 +37,27 @@ jobs:
           repository_name: pr-linked-issues-action-testing
           pull_request: 6
           owners: true
+          add_links_by_content: |
+            **Closes**: #{issue_number}
+            makes #{issue_number} crazy
+            resolves #{issue_number} even if not exists
+            [{issue_number}]
+            ...{issue_number}..
+            #
+            # Comments like this must be ignored
+            #
+            ${issue_number}^
+            ({issue_number})
+            |{issue_number}|
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Check issue numbers
         run: |
-          if [ "${{ steps.get-issues.outputs.issues }}" != "1,2,7" ]; then exit 1; fi
+          echo "${{ steps.get-issues.outputs.issues }}"
+          echo "${{ steps.get-issues.outputs.opener }}"
+          echo "${{ steps.get-issues.outputs.others }}"
+          echo "${{ steps.get-issues.outputs.null }}"
+          if [ "${{ steps.get-issues.outputs.issues }}" != "0,1,2,7,55,57,58,60,77,78" ]; then exit 1; fi
           if [ "${{ steps.get-issues.outputs.opener }}" != "7" ]; then exit 1; fi
           if [ "${{ steps.get-issues.outputs.others }}" != "1,2" ]; then exit 1; fi
+          if [ "${{ steps.get-issues.outputs.null }}" != "0,55,57,58,60,77,78" ]; then exit 1; fi

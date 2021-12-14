@@ -13,7 +13,10 @@ inputs:
     description: Number of the pull request for which linked pull requests will be retrieved.
     required: false
   owners:
-    description: Indicate that the action will output `opener` and `others`, showing in them the linked issues opened by the pull request owner (`opener`) and those opened by other users (`others`).
+    description: The action will output `opener` and `others`, showing in them the linked issues opened by the pull request owner (`opener`) and those opened by other users (`others`).
+    required: false
+  add_links_by_content:
+    description: Add links to other issues defined in the pull request body using an `{issue_number}` placeholder. Multiple can be defined separating them by newlines.
     required: false
 outputs:
   issues:
@@ -30,6 +33,7 @@ runs:
     - ${{ inputs.repository_owner }}
     - ${{ inputs.repository_name }}
     - ${{ inputs.pr_number }}
+    - ${{ inputs.add_links_by_content }}
 
 branding:
   icon: 'box'
