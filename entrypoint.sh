@@ -20,7 +20,7 @@ prepareInputs() {
     if [ "$PULL_REQUEST" = "null" ]; then
       printf "PR number can't be retrieved from event data.\n" >&2
       printf "You must define a pull request number using 'pr_number' input or" >&2
-      printf " execute the action using a pull request event.\n" >&2
+      printf " run the action against a pull request event.\n" >&2
       exit 1
     fi
   fi
@@ -34,9 +34,11 @@ get_issues() {
 
   # get linked issued from GraphQL API
   script="query{repository(name:\\\"$REPOSITORY_NAME\\\",owner:\\\"$REPOSITORY_OWNER\\\"){pullRequest(number:$PULL_REQUEST){closingIssuesReferences(first:100){nodes{number}}}}}"
-  linked_issues_response="$(curl -s -H 'Content-Type: application/json' \
+  linked_issues_response="$(
+    curl -s -H 'Content-Type: application/json' \
     -H "authorization: Bearer $GITHUB_TOKEN" \
-    -X POST -d "{ \"query\": \"$script\"}" https://api.github.com/graphql)"
+    -X POST -d "{ \"query\": \"$script\"}" https://api.github.com/graphql
+  )"
 
   # iterate over PRs and create files for each one of them
   echo $linked_issues_response \
@@ -57,7 +59,8 @@ get_issues() {
           -H "Accept: application/vnd.github.v3+json" \
           -H "authorization: Bearer $GITHUB_TOKEN" \
           https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/pulls/$PULL_REQUEST \
-        | jq .body)"
+        | jq .body
+      )"
     fi;
 
     # iterate over placeholder expressions
@@ -131,8 +134,6 @@ main() {
     | jq -r .user.login
   )"
 
-  opener=""
-  others=""
   touch /tmp/opener.txt /tmp/others.txt
 
   # iterate through linked issues
