@@ -54,6 +54,6 @@ jobs:
           echo "${{ steps.get-issues.outputs.issues }}"
           echo "${{ steps.get-issues.outputs.opener }}"
           echo "${{ steps.get-issues.outputs.others }}"
-          if [ "${{ steps.get-issues.outputs.issues }}" != "0,1,2,7,78" ]; then exit 1; fi
+          if [ "${{ steps.get-issues.outputs.issues }}" != "0,1,2,7,77,78" ]; then exit 1; fi
           if [ "${{ steps.get-issues.outputs.opener }}" != "7" ]; then exit 1; fi
-          if [ "${{ steps.get-issues.outputs.others }}" != "0,1,2,78" ]; then exit 1; fi
+          if [ "${{ steps.get-issues.outputs.others }}" != "0,1,2,77,78" ]; then exit 1; fi
