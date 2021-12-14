@@ -78,7 +78,8 @@ get_issues() {
         exit 1
       fi;
 
-      # build regex replacing '{issue_number}' with digit matcher using Posix ERE and escape it
+      # build regex replacing '{issue_number}' with digit matcher using Posix ERE and
+      # escaping regex characters
       #
       # Current limitations:
       #   - '{{issue_number}}' placeholder does not work in Alpine (in Ubuntu is OK)
@@ -124,6 +125,7 @@ get_issues() {
     done;
   fi;
 
+  # output issue numbers numerically ordered (-v)
   ls -v -1 "$linked_issues_tmpdir" | tr '\n' ',' | sed 's/,$//'
   rm -rf "$linked_issues_tmpdir"
 }
