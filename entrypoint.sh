@@ -80,11 +80,11 @@ get_issues() {
 
       # build regex replacing '{issue_number}' with digit matcher using Posix ERE and escape it
       #
-      # Current limitations:
-      #   - Number of occurrences using {#}
-      #   - Grouping using ()
-      #
-      # \x2b is the hexadecimal form of '+' character
+      # Hexadecimal characters used in the following regexes
+      # \x2b -> '+'
+      # \x28 -> '('
+      # \x29 -> ')'
+      # \x7d -> '{'
       regex="$(
         echo "$placeholder_line" \
         | sed -e "s/\*/\\\\*/g" \
@@ -94,6 +94,9 @@ get_issues() {
               -e "s/\]/\\\\]/g" \
               -e "s/\\^/\\\\^/g" \
               -e "s/\\$/\\\\$/g" \
+              -e "s/\x28/\\\\\x28/g" \
+              -e "s/\x29/\\\\\x29/g" \
+              -e "s/\x7d(?!issue_number)/\\\\\x7d/g" \
               -e "s/{issue_number}/([[:digit:]]+)/"
       )"
 
@@ -134,7 +137,7 @@ main() {
     | jq -r .user.login
   )"
 
-  touch /tmp/opener.txt /tmp/others.txt
+  touch /tmp/opener.txt /tmp/others.txt /tmp/null.txt
 
   # iterate through linked issues
   echo "$issues\n" | tr ',' '\n' | while read issue; do
@@ -145,18 +148,23 @@ main() {
     )"
     if [ "$owner" = "$PULL_REQUEST_OPENER" ]; then
       printf "$issue," >> /tmp/opener.txt
+    elif [ "$owner" = "null" ] && [ -n "$ADD_LINKS_BY_CONTENT" ]; then
+      # non existent issue
+      printf "$issue," >> /tmp/null.txt
     else
       printf "$issue," >> /tmp/others.txt
     fi
   done
 
-  opener="$(< /tmp/opener.txt sed 's/[n,]\{1,\}$//')"
-  others="$(< /tmp/others.txt sed 's/[n,]\{1,\}$//')"
-
+  echo "::set-output name=opener::$(< /tmp/opener.txt sed 's/[n,]\{1,\}$//')"
+  echo "::set-output name=others::$(< /tmp/others.txt sed 's/[n,]\{1,\}$//')"
   rm -f /tmp/opener.txt /tmp/others.txt
 
-  echo "::set-output name=opener::$opener"
-  echo "::set-output name=others::$others"
+  if [ -n "$ADD_LINKS_BY_CONTENT" ]; then
+    # add null output
+    echo "::set-output name=null::$(< /tmp/null.txt sed 's/[n,]\{1,\}$//')"
+    rm -rf /tmp/null.txt
+  fi;
 }
 
 

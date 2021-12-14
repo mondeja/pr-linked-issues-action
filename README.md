@@ -18,37 +18,52 @@ be obtained will be the pull request that triggered the action.
 In other contexts you can use `repository_owner`, `repository_name` and
 `pull_request` inputs to specify a pull request.
 
+This action o does not provide a way to check if the outputted linked issues
+are in other repositories than the repository where the pull request is triggered,
+just outputs issue numbers.
+
 ### Inputs
 
 All are optional.
 
-- <a name="input_repository_owner" href="#input_repository_owner">#</a>
+- <a name="input-repository_owner" href="#input-repository_owner">#</a>
  <b>repository_owner</b> ⇒ Organization or user owner of the repository against
  which the pull request with linked issues to retrieve is opened.
-- <a name="input_repository_name" href="#input_repository_name">#</a>
+- <a name="input-repository_name" href="#input-repository_name">#</a>
  <b>repository_name</b> ⇒ Name of the repository against which the pull request
  with linked issues to retrieve is opened.
-- <a name="input_pull_request" href="#input_pull_request">#</a>
+- <a name="input-pull_request" href="#input-pull_request">#</a>
  <b>pull_request</b> ⇒ Number of the pull request to retrieve.
-- <a name="input_owners" href="#input_owners">#</a> <b>owners</b> ⇒ Indicates
- if you want to retrieve linked issues owners. If `true`, the outputs `opener`
- and `others` will be added.
+- <a name="input-owners" href="#input-owners">#</a> <b>owners</b> ⇒ Indicates
+ if you want to retrieve linked issues owners. If `true`, the outputs
+ [`opener`](#output-opener) and [`others`](#output-others) will be added.
 - <a name="add_links_by_content" href="#add_links_by_content">#</a> <b>add_links_by_content</b> ⇒ Add other links to issues numbers defined in the
  body of the pull request. Specify inside a `{issue_number}` placeholder
  a content matcher for additional issues that will be linked. Multiple can be
- defined separating them by newlines.
+ defined separating them by newlines. Keep in mind that the existence of the
+ issues discovered by this feature is not guaranteed, it just discovers
+ numbers giving the provided placeholders. If you pass
+ [`owners` input](#input-owners) as `true`, you'll be able to check if not
+ exist checking if are contained by [`null` output](#output-null).
 
 ### Outputs
 
-- <a name="output_issues" href="#output_issues">#</a> <b>issues</b> ⇒ Linked
+- <a name="output-issues" href="#output-issues">#</a> <b>issues</b> ⇒ Linked
  issues for the pull request, separated by commas.
 
-If `owners` input is `true`, the next outputs will be added:
+If [`owners` input](#input-owners) is `true`, the next outputs will be added:
 
-- <a name="output_opener" href="#output_opener">#</a> <b>opener</b> ⇒ Linked
+- <a name="output-opener" href="#output-opener">#</a> <b>opener</b> ⇒ Linked
  issues that have been opened by the pull request opener.
-- <a name="output_others" href="#output_others">#</a> <b>others</b> ⇒ Linked
+- <a name="output-others" href="#output-others">#</a> <b>others</b> ⇒ Linked
  issues that haven't been opened by the pull request opener.
+
+If `add_links_by_content` feature discovers issues that doesn't exists
+[`owners` input](#input-owners) is `true`, their numbers will be added to the
+next output:
+
+- <a name="output-null" href="#output-null">#</a> <b>null</b> ⇒ Linked
+ issues that doesn't exists, so they don't have owner.
 
 ## Examples
 
