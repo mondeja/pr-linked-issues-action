@@ -12,8 +12,8 @@ This action returns which issues may be be closed by a pull request using
 ## Documentation
 
 Without specifying inputs, you should run it on `pull_request` or
-`pull_request_target` events and the pull request for which linked issues will
-be obtained will be the pull request that triggered the action.
+`pull_request_target` events and the pull request for which linked issues
+will be the pull request that triggered the action.
 
 In other contexts you can use `repository_owner`, `repository_name` and
 `pull_request` inputs to specify a pull request.
