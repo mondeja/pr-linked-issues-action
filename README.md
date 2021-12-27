@@ -18,8 +18,8 @@ will be the pull request that triggered the action.
 In other contexts you can use `repository_owner`, `repository_name` and
 `pull_request` inputs to specify a pull request.
 
-This action o does not provide a way to check if the outputted linked issues
-are in other repositories than the repository where the pull request is triggered,
+This action does not provide a way to check if the outputted linked issues are
+in other repositories than the repository where the pull request is triggered,
 just outputs issue numbers.
 
 ### Inputs
