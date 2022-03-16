@@ -4,10 +4,17 @@ export INPUT_REPOSITORY_OWNER="mondeja"
 export INPUT_REPOSITORY_NAME="pr-linked-issues-action-testing"
 
 checkDependencies() {
-  if [ "$(command -v "shunit2")" = "" ]; then
+  if [ -z "$(command -v "shunit2")" ]; then
     printf "You need to install shunit2 or add it to PATH to run tests.\n" >&2
     exit 1
-  fi;
+  fi
+}
+
+checkEnvironmentVariables() {
+  if [ -z "$GITHUB_TOKEN" ]; then
+    printf "You need to define the environment variable GITHUB_TOKEN to run tests.\n" >&2
+    exit 1
+  fi
 }
 
 testNoLinkedPRs() {
@@ -69,8 +76,15 @@ testLinkedPrsByContentOwners() {
 fishes #{issue_number}" ./entrypoint)"
 }
 
+testLinkPrsByContentDontContainPlaceholder() {
+  assertEquals \
+    "The line 'foo' of the input 'add_links_by_content' does not contains the '{issue_number}' placeholder." \
+    "$(INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="foo" ./entrypoint 2>&1)"
+}
+
 main() {
   checkDependencies
+  checkEnvironmentVariables
   . shunit2
 }
 
