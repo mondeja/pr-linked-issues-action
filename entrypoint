@@ -74,8 +74,7 @@ get_issues() {
       fi;
 
       # check that every line of 'add_links_by_content' input contains the '{issue_number}' placeholder
-      contains_pull_request_placeholder="$(echo "$placeholder_line" | grep "{issue_number}")"
-      if [ -z "$contains_pull_request_placeholder" ]; then
+      if ! echo "$placeholder_line" | grep "{issue_number}" > /dev/null; then
         printf "The line '%s' of the input 'add_links_by_content'" "$placeholder_line" >&2
         printf " does not contains the '{issue_number}' placeholder.\n" >&2
         exit 1
