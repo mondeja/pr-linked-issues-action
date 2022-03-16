@@ -5,6 +5,7 @@ REPOSITORY_NAME="$INPUT_REPOSITORY_NAME"
 PULL_REQUEST="$INPUT_PULL_REQUEST"
 ADD_LINKS_BY_CONTENT="$INPUT_ADD_LINKS_BY_CONTENT"
 
+_RETRY_OPTS="--connect-timeout 5 --max-time 30 --retry 5 --retry-delay 1 --retry-max-time 60"
 
 prepareInputs() {
   if [ -z "$REPOSITORY_OWNER" ]; then
@@ -37,7 +38,8 @@ get_issues() {
   linked_issues_response="$(
     curl -s -H 'Content-Type: application/json' \
     -H "authorization: Bearer $GITHUB_TOKEN" \
-    -X POST -d "{ \"query\": \"$script\"}" https://api.github.com/graphql
+    -X POST -d "{ \"query\": \"$script\"}" https://api.github.com/graphql \
+    $_RETRY_OPTS
   )"
 
   # iterate over PRs and create files for each one of them
@@ -59,6 +61,7 @@ get_issues() {
           -H "Accept: application/vnd.github.v3+json" \
           -H "authorization: Bearer $GITHUB_TOKEN" \
           https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/pulls/$PULL_REQUEST \
+          $_RETRY_OPTS \
         | jq .body
       )"
     fi;
@@ -70,7 +73,7 @@ get_issues() {
         continue
       fi;
 
-      # check that every line contains the '{issue_number}' placeholder
+      # check that every line of 'add_links_by_content' input contains the '{issue_number}' placeholder
       contains_pull_request_placeholder="$(echo "$placeholder_line" | grep "{issue_number}")"
       if [ -z "$contains_pull_request_placeholder" ]; then
         printf "The line '%s' of the input 'add_links_by_content'" "$placeholder_line" >&2
@@ -108,10 +111,15 @@ get_issues() {
               -e "s/{issue_number}/([[:digit:]]+)/"
       )"
 
+      # if grep doesn't found any matchs, it exists with code 1,
+      # which in combination with 'set -x' makes the program terminate
+      # unexpectedly without printing any errors, so the part
+      # '|| test $? = 1' makes it to only terminate if the grep exitcode
+      # is different to 1
       more_linked_issues_by_content="$(
         echo "$pull_request_body" \
-        | grep -Eo "$regex" \
-        | grep -Eo "[[:digit:]]+"
+        | { grep -Eo "$regex" || test $? = 1; } \
+        | { grep -Eo "[[:digit:]]+" || test $? = 1; }
       )"
 
       echo "$more_linked_issues_by_content" | while read linked_issue_by_content; do
@@ -131,6 +139,7 @@ get_issues() {
 }
 
 main() {
+  set -e
   prepareInputs
   issues="$(get_issues)"
   echo "::set-output name=issues::$issues"
@@ -143,6 +152,7 @@ main() {
   PULL_REQUEST_OPENER="$(
     curl -s "https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/pulls/$PULL_REQUEST" \
       -H "authorization: Bearer $GITHUB_TOKEN" \
+      $_RETRY_OPTS \
     | jq -r .user.login
   )"
 
@@ -153,6 +163,7 @@ main() {
     owner="$(
       curl -s "https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/issues/$issue" \
         -H "authorization: Bearer $GITHUB_TOKEN" \
+        $_RETRY_OPTS \
       | jq -r .user.login
     )"
     if [ "$owner" = "$PULL_REQUEST_OPENER" ]; then
@@ -175,6 +186,5 @@ main() {
     rm -rf /tmp/null.txt
   fi;
 }
-
 
 main
