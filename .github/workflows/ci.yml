@@ -26,9 +26,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Get branch name
-        id: get-branch-name
-        run: echo "::set-output name=branch::$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}})"
       - name: Get issue numbers separated by commas
         id: get-issues
         uses: mondeja/pr-linked-issues-action@v2
