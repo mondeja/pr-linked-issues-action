@@ -2,6 +2,7 @@
 
 export INPUT_REPOSITORY_OWNER="mondeja"
 export INPUT_REPOSITORY_NAME="pr-linked-issues-action-testing"
+export GITHUB_OUTPUT="/tmp/github-output.txt"
 
 checkDependencies() {
   if [ -z "$(command -v "shunit2")" ]; then
@@ -17,38 +18,45 @@ checkEnvironmentVariables() {
   fi
 }
 
+getOutput() {
+  cat "$GITHUB_OUTPUT"
+}
+
 testNoLinkedPRs() {
-  assertEquals "::set-output name=issues::" "$(INPUT_PULL_REQUEST=5 ./entrypoint)"
+  INPUT_PULL_REQUEST=5 ./entrypoint
+  assertEquals "issues=" "$(getOutput)"
 }
 
 testLinkedPR() {
-  assertEquals "::set-output name=issues::1" "$(INPUT_PULL_REQUEST=4 ./entrypoint)"
+  INPUT_PULL_REQUEST=4 ./entrypoint
+  assertEquals "issues=1" "$(getOutput)"
 }
 
 testLinkedPRs() {
-  assertEquals "::set-output name=issues::1,2" "$(INPUT_PULL_REQUEST=3 ./entrypoint)"
+  INPUT_PULL_REQUEST=3 ./entrypoint
+  assertEquals "issues=1,2" "$(getOutput)"
 }
 
 testLinkedPRsOwners() {
+  INPUT_PULL_REQUEST=6 INPUT_OWNERS=true ./entrypoint
   assertEquals \
-    "::set-output name=issues::1,2,7
-::set-output name=opener::7
-::set-output name=others::1,2" \
-    "$(INPUT_PULL_REQUEST=6 INPUT_OWNERS=true ./entrypoint)"
+    "issues=1,2,7
+opener=7
+others=1,2" \
+    "$(getOutput)"
 }
 
 testLinkedPRsOwnersNoOthers() {
+  INPUT_PULL_REQUEST=3 INPUT_OWNERS=true ./entrypoint
   assertEquals \
-    "::set-output name=issues::1,2
-::set-output name=opener::1,2
-::set-output name=others::" \
-    "$(INPUT_PULL_REQUEST=3 INPUT_OWNERS=true ./entrypoint)"
+    "issues=1,2
+opener=1,2
+others=" \
+    "$(getOutput)"
 }
 
 testLinkedPRsByContent() {
-  assertEquals \
-    "::set-output name=issues::0,2,7,34,55,57,58,59,60,65,77" \
-    "$(INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="
+  INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="
 **Closes**: #{issue_number}
 fishes #{issue_number}
 humancipates #{issue_number}
@@ -62,24 +70,35 @@ resolves #{issue_number} even if not exists
 # Lines starting with '#' character must be ignored
 #
 {{issue_number}}
-|{issue_number}|" ./entrypoint)"
+|{issue_number}|" ./entrypoint
+
+  assertEquals \
+    "issues=0,2,7,34,55,57,58,59,60,65,77" \
+    "$(getOutput)"
 }
 
 testLinkedPrsByContentOwners() {
-  assertEquals \
-    "::set-output name=issues::2,7,34
-::set-output name=opener::7
-::set-output name=others::2
-::set-output name=null::34" \
-    "$(INPUT_OWNERS=true INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="
+  INPUT_OWNERS=true INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="
 **Closes**: #{issue_number}
-fishes #{issue_number}" ./entrypoint)"
+fishes #{issue_number}" ./entrypoint
+
+  assertEquals \
+    "issues=2,7,34
+opener=7
+others=2
+null=34" \
+    "$(getOutput)"
 }
 
 testLinkPrsByContentDontContainPlaceholder() {
   assertEquals \
     "The line 'foo' of the input 'add_links_by_content' does not contains the '{issue_number}' placeholder." \
-    "$(INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="foo" ./entrypoint 2>&1)"
+    "$(INPUT_PULL_REQUEST=8 INPUT_ADD_LINKS_BY_CONTENT="foo" ./entrypoint 2>&1 1>/dev/null)"
+}
+
+# Called before every test function is executed
+setUp() {
+  rm -f "$GITHUB_OUTPUT"
 }
 
 main() {

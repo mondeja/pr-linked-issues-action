@@ -5,7 +5,7 @@ REPOSITORY_NAME="$INPUT_REPOSITORY_NAME"
 PULL_REQUEST="$INPUT_PULL_REQUEST"
 ADD_LINKS_BY_CONTENT="$INPUT_ADD_LINKS_BY_CONTENT"
 
-_RETRY_OPTS="--connect-timeout 5 --max-time 30 --retry 5 --retry-delay 1 --retry-max-time 60"
+_RETRY_OPTS="--connect-timeout 15 --max-time 60 --retry 10 --retry-delay 1 --retry-max-time 600"
 
 prepareInputs() {
   if [ -z "$REPOSITORY_OWNER" ]; then
@@ -111,7 +111,7 @@ get_issues() {
       )"
 
       # if grep doesn't found any matchs, it exists with code 1,
-      # which in combination with 'set -x' makes the program terminate
+      # which in combination with 'set -e' makes the program terminate
       # unexpectedly without printing any errors, so the part
       # '|| test $? = 1' makes it to only terminate if the grep exitcode
       # is different to 1
@@ -141,7 +141,7 @@ main() {
   set -e
   prepareInputs
   issues="$(get_issues)"
-  echo "::set-output name=issues::$issues"
+  echo "issues=$issues" >> "$GITHUB_OUTPUT"
 
   # if we need don't need to get the issue owners, exit now
   if [ -z "$INPUT_OWNERS" ]; then
@@ -175,13 +175,13 @@ main() {
     fi
   done
 
-  echo "::set-output name=opener::$(< /tmp/opener.txt sed 's/[n,]\{1,\}$//')"
-  echo "::set-output name=others::$(< /tmp/others.txt sed 's/[n,]\{1,\}$//')"
+  echo "opener=$(< /tmp/opener.txt sed 's/[n,]\{1,\}$//')" >> "$GITHUB_OUTPUT"
+  echo "others=$(< /tmp/others.txt sed 's/[n,]\{1,\}$//')" >> "$GITHUB_OUTPUT"
   rm -f /tmp/opener.txt /tmp/others.txt
 
   if [ -n "$ADD_LINKS_BY_CONTENT" ]; then
     # add null output
-    echo "::set-output name=null::$(< /tmp/null.txt sed 's/[n,]\{1,\}$//')"
+    echo "null=$(< /tmp/null.txt sed 's/[n,]\{1,\}$//')" >> "$GITHUB_OUTPUT"
     rm -rf /tmp/null.txt
   fi;
 }
